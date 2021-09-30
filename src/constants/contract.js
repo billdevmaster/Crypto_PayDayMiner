@@ -1,4 +1,4 @@
-export const minersAddr = '0x44b2fc2d43d0Be6E97AC07eDa84c91C3dBD3e03C';
+export const minersAddr = '0xbdF90F41308FFf73b874A387c81488B332205fC7';
 
 export const minersAbi = [
 	{
