@@ -50,7 +50,6 @@ const Hire = () => {
         // const bnbBalance = await getBNBBalance();
         
         // get contract balance
-        console.log(userAddress);
         web3.eth.getBalance(minersAddr).then(result => {
             setContractBalance(web3.utils.fromWei(result));
         }).catch((err) => {
@@ -117,6 +116,7 @@ const Hire = () => {
 
   useEffect(async () => {
     const remainHour = eggstohatch1 - diggingVal / myMiner;
+    console.log(remainHour);
     setFilltime(secondsToString(remainHour));
   }, [myMiner, diggingVal])
 
@@ -221,7 +221,7 @@ const Hire = () => {
           <Row style={{ padding: '15px 0' }}>
             <Col md="4" sm="12"></Col>
             <Col md="4" sm="12">
-              <Row>
+              <Row className="buy">
                 <Col md="4" sm="12">
                   <Input value={enterBnb} onChange={handleInput} placeholder="Hire Staff"/>
                 </Col>
