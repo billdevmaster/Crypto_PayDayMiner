@@ -3,8 +3,9 @@ import { Container, Row, Col } from 'reactstrap';
 import { SocialIcon } from 'react-social-icons';
 
 import { FooterStyle } from './style';
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaDiscord, FaTelegram, FaYoutube } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaTelegram } from "react-icons/fa";
 import LogoImage from '../assets/images/logo.png';
+import BSCIcon from '../assets/images/bsc-icon.png';
 
 const Footer = () => {
   return (
@@ -19,33 +20,23 @@ const Footer = () => {
             <Col className="md-8 sm-12">
               <ul className="social-link">
                 <li>
-                  <a href=''>
+                  <a href='https://bscscan.com/address/0x4e794B6955c2987Af20902943A4B2507eA4F1dC1' target="_blink">
+                    <img src={BSCIcon}/>
+                  </a>
+                </li>
+                <li>
+                  <a href='https://www.facebook.com/paydofficial' target="_blink">
                     <FaFacebookF/>
                   </a>
                 </li>
                 <li>
-                  <a href=''>
+                  <a href='https://twitter.com/paydofficial' target="_blink">
                     <FaTwitter/>
                   </a>
                 </li>
                 <li>
-                  <a href=''>
-                    <FaLinkedinIn/>
-                  </a>
-                </li>
-                <li>
-                  <a href=''>
-                    <FaDiscord/>
-                  </a>
-                </li>
-                <li>
-                  <a href=''>
+                  <a href='https://t.me/paydofficial' target="_blink">
                     <FaTelegram/>
-                  </a>
-                </li>
-                <li>
-                  <a href=''>
-                    <FaYoutube/>
                   </a>
                 </li>
               </ul>
