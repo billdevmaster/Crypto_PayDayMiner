@@ -111,7 +111,7 @@ const Hire = () => {
       minerContract.methods.calculateGoldsSell(diggingVal).call().then( async result => {
         const devFee = await minerContract.methods.devFee(result).call();
         const ownerFee = await minerContract.methods.ownerFee(result).call();
-        setMinedVal(web3.utils.fromWei(result) - web3.utils.fromWei(devFee) -  - web3.utils.fromWei(ownerFee))
+        setMinedVal(parseFloat(parseFloat(web3.utils.fromWei(result) - web3.utils.fromWei(devFee) -  - web3.utils.fromWei(ownerFee)).toFixed(5)))
       }).catch((err) => {
           console.log(err)
       });
