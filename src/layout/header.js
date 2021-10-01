@@ -70,12 +70,6 @@ const Header = () => {
                 <NavLink className="nav-link" to="/home/">Home</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink className="nav-link" to="/hire-staff/">Hire Staff</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink className="nav-link" to="/become-ceo/">Become CEO</NavLink>
-              </NavItem>
-              <NavItem>
                 <NavLink className="nav-link" to="/how-to-fire/">How to hire</NavLink>
               </NavItem>
               <NavItem>
