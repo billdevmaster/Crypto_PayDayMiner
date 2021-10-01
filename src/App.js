@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import { Provider, useSelector } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 import Header from './layout/header';
@@ -35,7 +37,7 @@ const StyleWrapper = Styled.div`
     background-color: #FDC000;
     color: #000;
     border-radius: 10px 10px 10px 10px;
-    min-height: 40px;
+    min-height: 45px;
     border: 0;
     &.full {
       width: 100%;
@@ -54,6 +56,7 @@ const App = () => {
             <Redirect to="/" />
           </Switch>
         </Router>
+        <ToastContainer />
         <Footer />
       </Provider>
     </StyleWrapper>

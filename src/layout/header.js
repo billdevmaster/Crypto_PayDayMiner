@@ -9,7 +9,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  // NavLink,
+  Spinner,
   Container,
   Button,
 } from 'reactstrap';
@@ -31,13 +31,23 @@ const Header = () => {
   })
 
   const [isOpen, setIsOpen] = useState(false);
-  const [showAddress, setShowAddress] = useState("connect")
+  const [showAddress, setShowAddress] = useState("connect");
+  const [processingConnect, setProcessingConnect] = useState(false);
   
   const toggle = () => setIsOpen(!isOpen);
   const connectWallet = async () => { 
-    await ethereum.request({method: 'eth_requestAccounts'});
-    const defaultAccounts = await web3.eth.getAccounts();
-    dispatch({ type: "set", userAddress:defaultAccounts[0] });
+    setProcessingConnect(true)
+    ethereum.request({method: 'eth_requestAccounts'})
+    .then(async result => {
+      console.log("okay")
+      const defaultAccounts = await web3.eth.getAccounts();
+      setProcessingConnect(false)
+      dispatch({ type: "set", userAddress:defaultAccounts[0] });
+    })
+    .catch((err) => {
+      setProcessingConnect(false);
+      return;
+    });
   }
 
   useEffect(() => {
@@ -75,9 +85,8 @@ const Header = () => {
           </Collapse>
         </Navbar>
         <Button onClick={connectWallet} className="btn-connect">
-          <FontAwesomeIcon icon={faWallet} />
           <span>
-            {showAddress!==''?showAddress:`CONNECT WALLET`}
+            {processingConnect?<Spinner size="sm" color="dark" /> : <><FontAwesomeIcon icon={faWallet} />{showAddress!==''?showAddress:`CONNECT WALLET`}</>}
           </span>
         </Button>
       </Container>

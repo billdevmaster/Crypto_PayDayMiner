@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import Web3 from 'web3';
-import { Button, Container, Row, Col, Input, InputGroupAddon, InputGroup, Card } from 'reactstrap';
+import { Button, Container, Row, Col, Input, Card, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { toast } from 'react-toastify';
 import { faWallet, faBolt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { HireStyle } from '../../style'
@@ -32,9 +33,12 @@ const Hire = () => {
   const [lastHatch, setLastHatch] = useState(0);
   const [filltime, setFilltime] = useState("");
   const [myMiner, setMyMiner] = useState(0);
+  const [processingBuy, setProcessingBuy] = useState(false);
+  const [processingCompound, setProcessingCompound] = useState(false);
+  const [processingWithdraw, setProcessingWithdraw] = useState(false);
 
   useEffect(async () => {
-   
+    
     const defaultAccounts = await web3.eth.getAccounts();
     if (defaultAccounts.length > 0) {
       dispatch({ type: "set", userAddress:defaultAccounts[0] });
@@ -116,7 +120,6 @@ const Hire = () => {
 
   useEffect(async () => {
     const remainHour = eggstohatch1 - diggingVal / myMiner;
-    console.log(remainHour);
     setFilltime(secondsToString(remainHour));
   }, [myMiner, diggingVal])
 
@@ -129,54 +132,69 @@ const Hire = () => {
   }
 
   const buy = async () => {
+    setProcessingBuy(true);
+    console.log("okay");
+    
     if (userAddress !== 'unknown') {
       if (enterBnb === 0) {
-        alert("please input field")
+        setProcessingBuy(false);
+        toast.warning("please input field")
         return;
       }
       minerContract.methods
       .rent(ref).send({from: userAddress, value: web3.utils.toWei(enterBnb)})
       .then( res => {
-        console.log(res);
-        alert("success")
+        setProcessingBuy(false);
+        toast.success("Successfully Done.")
       })
       .catch( err => {
+        setProcessingBuy(false);
+        toast.error("something is wrong.")
         console.log(err);
       })
     } else {
-      alert("please connect wallet")
+      setProcessingBuy(false);
+      toast.warning("please connect the metamask.")
     }
   }
 
   const withdraw = async() => {
+    setProcessingWithdraw(true)
     if (userAddress !== 'unknown') {
       minerContract.methods
       .withdraw().send({from: userAddress})
       .then( res => {
-        console.log(res);
-        alert("success")
+        setProcessingWithdraw(false)
+        toast.success("Successfully Done.")
       })
       .catch( err => {
         console.log(err);
+        setProcessingWithdraw(false)
+        toast.error("something is wrong.")
       })
     } else {
-      alert("please connect wallet")
+      setProcessingWithdraw(false)
+      toast.warning("please connect wallet")
     }
   }
 
   const compound = async () => {
+    setProcessingCompound(true)
     if (userAddress !== 'unknown') {
       minerContract.methods
       .compound(ref).send({from: userAddress})
       .then( res => {
-        console.log(res);
-        alert("success")
+        setProcessingCompound(false)
+        toast.success("Successfully Done.")
       })
       .catch( err => {
+        setProcessingCompound(false)
+        toast.error("something is wrong.")
         console.log(err);
       }) 
     } else {
-      alert("please connect wallet")
+      setProcessingCompound(false)
+      toast.warning("please connect wallet")
     }
   }
 
@@ -206,7 +224,8 @@ const Hire = () => {
               <Card className="bg-red text-white">
                 <p className="text-bold">You Have </p>
                 <p>{myMiner} <span className="text-bold">STAFF</span></p>
-                <p><span className="text-bold">Mined</span> {minedVal} <span className="text-bold">BNB</span></p>
+                <p><span className="text-bold">Minted</span> {minedVal} <span className="text-bold">BNB</span></p>
+                <p><span className="text-bold">Contract Balance</span> {contractBalance} <span className="text-bold">BNB</span></p>
               </Card>
             </Col>
           </Row>
@@ -214,7 +233,7 @@ const Hire = () => {
             <Col md="4" sm="12"></Col>
             <Col md="4" sm="12">
               <Card className="bg-red text-white text-center">
-                <p className="text-bold">{filltime} Until Barrel is Full</p>
+                <p className="text-bold">{filltime} Until Briefcase is Full</p>
               </Card>
             </Col>
           </Row>
@@ -227,7 +246,11 @@ const Hire = () => {
                 </Col>
                 <Col md="3" sm="12"></Col>
                 <Col md="5" sm="12" style={{ textAlign: "right" }}>
-                  <Button className="btn btn-primary full" onClick={buy}><FontAwesomeIcon icon={faUserPlus} /> Hires Staff</Button>
+                  <Button className="btn btn-primary full" onClick={buy}>
+                    {
+                    processingBuy ? <Spinner size="sm" color="dark"/> : <><FontAwesomeIcon icon={faUserPlus} /> Hires Staff</>
+                    }
+                  </Button>
                 </Col>
               </Row>
             </Col>
@@ -235,13 +258,17 @@ const Hire = () => {
           <Row style={{ padding: '15px 0' }}>
             <Col md="4" sm="12"></Col>
             <Col md="4" sm="12">
-              <Button className="btn btn-primary full" onClick={compound}><FontAwesomeIcon icon={faBolt} /> COMPOUND</Button>
+              <Button className="btn btn-primary full" onClick={compound}>
+              {processingCompound ? <Spinner size="sm" color="dark"/> : <><FontAwesomeIcon icon={faBolt} /> COMPOUND</>}
+              </Button>
             </Col>
           </Row>
           <Row style={{ padding: '15px 0' }}>
             <Col md="4" sm="12"></Col>
             <Col md="4" sm="12">
-              <Button className="btn btn-primary full" onClick={withdraw}><FontAwesomeIcon icon={faWallet} /> BANK BNB</Button>
+              <Button className="btn btn-primary full" onClick={withdraw}>
+              {processingWithdraw ? <Spinner size="sm" color="dark"/> : <><FontAwesomeIcon icon={faWallet} /> BANK BNB</>}
+              </Button>
             </Col>
           </Row>
         </Container>
