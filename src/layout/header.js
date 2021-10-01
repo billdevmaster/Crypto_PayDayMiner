@@ -63,8 +63,8 @@ const Header = () => {
           <NavbarBrand>
             <NavLink to="/"><img src={LogoImage} /></NavLink> 
           </NavbarBrand>
-          <NavbarToggler onClick={toggle} />
-          <Collapse isOpen={isOpen} navbar>
+          {/* <NavbarToggler onClick={toggle} /> */}
+          {/* <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
                 <NavLink className="nav-link" to="/home/">Home</NavLink>
@@ -76,7 +76,7 @@ const Header = () => {
                 <NavLink className="nav-link" to={`/payday-merch/`}>Payday Merch</NavLink>
               </NavItem>
             </Nav>
-          </Collapse>
+          </Collapse> */}
         </Navbar>
         <Button onClick={connectWallet} className="btn-connect">
           <span>

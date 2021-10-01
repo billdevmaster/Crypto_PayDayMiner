@@ -9,9 +9,9 @@ const HeaderStyle = Styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        @media(max-width: 768px) {
-            display: block;
-        }
+        // @media(max-width: 768px) {
+        //     display: block;
+        // }
         .navbar {
             @media(min-width: 768px) {
                 width: 80%;
