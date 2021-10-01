@@ -16,3 +16,7 @@ export const secondsToString = (seconds) =>
 
     return numhours + "h " + numminutes + "m "//+numseconds+"s";
 }
+
+export const parseIntDecimal = (int, num) => {
+    return parseFloat(parseFloat(int).toFixed(num));
+}

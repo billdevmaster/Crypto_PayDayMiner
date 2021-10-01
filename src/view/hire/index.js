@@ -9,7 +9,7 @@ import { faWallet, faBolt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { HireStyle } from '../../style'
 import { minersAddr, minersAbi } from '../../constants/contract';
-import {secondsToString} from '../../utility';
+import { secondsToString, parseIntDecimal } from '../../utility';
 import BG from '../../assets/images/hire-bg.jpg';
 
 const eggstohatch1 = 2592000;
@@ -55,7 +55,7 @@ const Hire = () => {
         
         // get contract balance
         web3.eth.getBalance(minersAddr).then(result => {
-            setContractBalance(web3.utils.fromWei(result));
+            setContractBalance(parseIntDecimal(web3.utils.fromWei(result), 5));
         }).catch((err) => {
             console.log(err)
         });
@@ -111,7 +111,8 @@ const Hire = () => {
       minerContract.methods.calculateGoldsSell(diggingVal).call().then( async result => {
         const devFee = await minerContract.methods.devFee(result).call();
         const ownerFee = await minerContract.methods.ownerFee(result).call();
-        setMinedVal(parseFloat(parseFloat(web3.utils.fromWei(result) - web3.utils.fromWei(devFee) -  - web3.utils.fromWei(ownerFee)).toFixed(5)))
+        const value = web3.utils.fromWei(result) - web3.utils.fromWei(devFee) -  - web3.utils.fromWei(ownerFee);
+        setMinedVal(parseIntDecimal(value, 5))
       }).catch((err) => {
           console.log(err)
       });
