@@ -36,72 +36,59 @@ const Hire = () => {
   const [processingBuy, setProcessingBuy] = useState(false);
   const [processingCompound, setProcessingCompound] = useState(false);
   const [processingWithdraw, setProcessingWithdraw] = useState(false);
-
-  useEffect(async () => {
+  const timer = () => {
+    if (userAddress !== '') {
+           
+      // get contract balance
+      web3.eth.getBalance(minersAddr).then(result => {
+          setContractBalance(parseIntDecimal(web3.utils.fromWei(result), 3));
+      }).catch((err) => {
+          console.log(err)
+      });
+  
+      // get my balance
+      web3.eth.getBalance(userAddress).then(result => {
+          setMyBalance(web3.utils.fromWei(result));
+      }).catch((err) => {
+          console.log(err)
+      });
     
+      // get last hatch
+      minerContract.methods.lastHatch(userAddress).call({from:userAddress}).then(result => {
+          setLastHatch(result)
+      }).catch((err) => {
+          console.log(err)
+      });
+  
+      // get my eggs
+      minerContract.methods.getMyGolds().call({from:userAddress}).then(result => {
+        setDiggingVal(result)
+      }).catch((err) => {
+          console.log(err)
+      });
+  
+      // get my miners
+      minerContract.methods.getMyMiners().call({from:userAddress}).then(result => {
+          if (result == '0x') {
+              result = 0;
+          }
+          setMyMiner(result)
+      }).catch((err) => {
+          console.log(err)
+      });
+    }
+  }
+  
+  useEffect(async () => {
     const defaultAccounts = await web3.eth.getAccounts();
     if (defaultAccounts.length > 0) {
       dispatch({ type: "set", userAddress:defaultAccounts[0] });
-      setRef(defaultAccounts[0])
+      const queryParams = new URLSearchParams(window.location.search);
+      const ref = queryParams.get("ref") === null ? defaultAccounts[0] : queryParams.get("ref");
+      setRef(ref)
     }
-    // timer.clearInterval();
-    const timer = setInterval(async () => {
-      if (userAddress !== '') {
-        // connect wallet
-        // await ethereum.request({method: 'eth_requestAccounts'});
-        // const _chainId = await getCurrentChainId();
-        // let usreAccount = await getDefaultAddres();
-        // const bnbBalance = await getBNBBalance();
-        
-        // get contract balance
-        web3.eth.getBalance(minersAddr).then(result => {
-            setContractBalance(parseIntDecimal(web3.utils.fromWei(result), 5));
-        }).catch((err) => {
-            console.log(err)
-        });
-    
-        // get my balance
-        web3.eth.getBalance(userAddress).then(result => {
-            setMyBalance(web3.utils.fromWei(result));
-        }).catch((err) => {
-            console.log(err)
-        });
-      
-        // get last hatch
-        minerContract.methods.lastHatch(userAddress).call({from:userAddress}).then(result => {
-            setLastHatch(result)
-        }).catch((err) => {
-            console.log(err)
-        });
-    
-        // get my eggs
-        minerContract.methods.getMyGolds().call({from:userAddress}).then(result => {
-          setDiggingVal(result)
-        }).catch((err) => {
-            console.log(err)
-        });
-    
-        // get my miners
-        minerContract.methods.getMyMiners().call({from:userAddress}).then(result => {
-            if (result == '0x') {
-                result = 0;
-            }
-            setMyMiner(result)
-        }).catch((err) => {
-            console.log(err)
-        });
-      }
-    }, 2000)
-
-    // get my miner
-    // minerContract.methods
-    // .getMyMiners().send({from: userAddress})
-    // .then( res => {
-    //   console.log(res);
-    // })
-    // .catch( err => {
-    //   console.log(err);
-    // })
+    clearInterval(timer);
+    setInterval(timer, 2000);
   }, [userAddress]);
 
   // get mined val
@@ -126,18 +113,13 @@ const Hire = () => {
 
   const handleInput = (e) => {
     setEnterBnb(e.target.value)
-  }
-
-  const handleInputRef = (e) => {
-    setRef(e.target.value)
+    
   }
 
   const buy = async () => {
     setProcessingBuy(true);
-    console.log("okay");
-    
-    if (userAddress !== 'unknown') {
-      if (enterBnb === 0) {
+    if (userAddress !== '') {
+      if (isNaN(enterBnb) || enterBnb === '' || enterBnb === 0) {
         setProcessingBuy(false);
         toast.warning("please input field")
         return;
@@ -161,7 +143,7 @@ const Hire = () => {
 
   const withdraw = async() => {
     setProcessingWithdraw(true)
-    if (userAddress !== 'unknown') {
+    if (userAddress !== '') {
       minerContract.methods
       .withdraw().send({from: userAddress})
       .then( res => {
@@ -181,7 +163,7 @@ const Hire = () => {
 
   const compound = async () => {
     setProcessingCompound(true)
-    if (userAddress !== 'unknown') {
+    if (userAddress !== '') {
       minerContract.methods
       .compound(ref).send({from: userAddress})
       .then( res => {
