@@ -261,20 +261,22 @@ const Hire = () => {
               </Button>
             </Col>
           </Row>
-          <Row>
-            <Col md="4" sm="12"></Col>
-            <Col md="4" sm="12">
-              <Card className="bg-red text-white">
-                <p>Share your referral link</p>
-                <CopyToClipboard text={`https://paydofficial.com?ref=${userAddress}`} onCopy={copyAddress}>
-                  {/* <>
-                    <p>Share your referral link<a style={{ float: 'right', cursor: 'pointer' }}><FontAwesomeIcon icon={faClipboardCheck} /></a></p> */}
-                    <a style={{ fontSize: 16, textDecoration: 'underline', cursor: 'pointer' }}>https://paydofficial.com?ref={userAddress}</a>
-                  {/* </> */}
-                </CopyToClipboard>
-              </Card>
-            </Col>
-          </Row>
+          {userAddress !== '' ? 
+            <Row>
+              <Col md="4" sm="12"></Col>
+              <Col md="4" sm="12">
+                <Card className="bg-red text-white">
+                  <p>Share your referral link</p>
+                  <CopyToClipboard text={`https://paydofficial.com?ref=${userAddress}`} onCopy={copyAddress}>
+                    {/* <>
+                      <p>Share your referral link<a style={{ float: 'right', cursor: 'pointer' }}><FontAwesomeIcon icon={faClipboardCheck} /></a></p> */}
+                      <a style={{ fontSize: 16, textDecoration: 'underline', cursor: 'pointer' }}>https://paydofficial.com?ref={userAddress}</a>
+                    {/* </> */}
+                  </CopyToClipboard>
+                </Card>
+              </Col>
+            </Row>
+          : ''}
         </Container>
       </div>
     </HireStyle>
