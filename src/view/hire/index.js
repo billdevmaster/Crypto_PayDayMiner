@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import 'bootstrap/dist/css/bootstrap.css';
 import Web3 from 'web3';
 import { Button, Container, Row, Col, Input, Card, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { toast } from 'react-toastify';
-import { faWallet, faBolt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faWallet, faBolt, faUserPlus, faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 
 import { HireStyle } from '../../style'
 import { minersAddr, minersAbi } from '../../constants/contract';
@@ -142,6 +143,7 @@ const Hire = () => {
   }
 
   const withdraw = async() => {
+    console.log(ref);
     setProcessingWithdraw(true)
     if (userAddress !== '') {
       minerContract.methods
@@ -195,6 +197,11 @@ const Hire = () => {
     .catch( err => {
       console.log(err);
     }) 
+  }
+
+  const copyAddress = () => {
+    console.log("okay");
+    toast.success("Successfully copyed")
   }
 
   return (
@@ -252,6 +259,20 @@ const Hire = () => {
               <Button className="btn btn-primary full" onClick={withdraw}>
               {processingWithdraw ? <Spinner size="sm" color="dark"/> : <><FontAwesomeIcon icon={faWallet} /> BANK BNB</>}
               </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col md="4" sm="12"></Col>
+            <Col md="4" sm="12">
+              <Card className="bg-red text-white">
+                <p>Share your referral link</p>
+                <CopyToClipboard text={`https://paydofficial.com?ref=${userAddress}`} onCopy={copyAddress}>
+                  {/* <>
+                    <p>Share your referral link<a style={{ float: 'right', cursor: 'pointer' }}><FontAwesomeIcon icon={faClipboardCheck} /></a></p> */}
+                    <a style={{ fontSize: 16, textDecoration: 'underline', cursor: 'pointer' }}>https://paydofficial.com?ref={userAddress}</a>
+                  {/* </> */}
+                </CopyToClipboard>
+              </Card>
             </Col>
           </Row>
         </Container>
